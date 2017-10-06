@@ -80,8 +80,8 @@ export class AddressListPage {
   }
 
   getAddressList() {
-    let headers = new Headers();
-    headers.append("X-Api-Key", "TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb")
+    let headers = new Headers();
+    headers.append("X-Api-Key", "TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb")
     return this.http.get(`/shipping?mailerId=${this.mailerId}`, {
     headers: headers
     }).toPromise().then(function(data:any){
@@ -93,7 +93,7 @@ export class AddressListPage {
         }
       })
     });
-  }  
+  } 
  
   
 
