@@ -44,7 +44,7 @@
 <ion-content padding>
 
   <ion-list>
-    <ion-item *ngFor="let item of addresslistRef$ | async" >
+    <ion-item *ngFor="let item of addresslistRef$" >
       <h2>Recipient Name : {{item.recipientName}}</h2>
       <h3>Recipient Address : {{item.recipientAddress}}</h3>
     </ion-item>

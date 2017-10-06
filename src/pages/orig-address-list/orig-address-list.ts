@@ -15,7 +15,7 @@ import { OriginalAddressInfo } from "../../models/address-info/address-info.inte
 })
 export class AddressListPage {
 
-  addresslistRef$ : FirebaseListObservable<OriginalAddressInfo[]>;
+  addresslistRef$ : any = [];
   mailerId :string;
   httpHeaders: HttpHeaders;
 
@@ -23,43 +23,14 @@ export class AddressListPage {
              ) {
               this.mailerId =   this.navParams.get('companyMailerId');
               console.log(this.mailerId);
-              // let apiRoot = 'https://api-qa.fusion.pitneycloud.com/fusionapi/address';
-
-              // let myHeaders = new Headers();
-              // myHeaders.append('Content-Type', 'application/json1');    
-              // let myParams = new URLSearchParams();
-              // myParams.append('mailerId',this.mailerId);	
-              // let myoptions = new RequestOptions({ headers: myHeaders, params: myParams });
-
-              // let headers = new Headers();
-              // headers.set('X-Api-Key', 'TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb');
-              // let opts = new RequestOptions();
-              // opts.headers = headers;
-              // let params = new URLSearchParams();
-              // params.set('mailerId',this.mailerId);
-              // opts.params = params;
-              // console.log(opts);
-
-              // let apiURL = `${apiRoot}?mailerId=${this.mailerId}`;
-              
-              // this.httpHeaders =  new HttpHeaders()
-              // this.httpHeaders.append('X-Api-Key', 'TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb');
-              
-              // this.http.get(apiRoot,myoptions).subscribe(data => {
-              //     console.log(data);
-              //   });
-             
-              
-              
-             
-              this.addresslistRef$ =  this.database.list('original-address-list',{
+    
+               Observable.fromPromise(this.getAddressList()).merge(this.database.list('original-address-list',{
                 query: {
                     orderByChild: 'mailerId',
                     equalTo: this.mailerId
                 }
-              });
-
-              this.getAddressList();
+              })).subscribe(res => 
+                this.addresslistRef$ = this.addresslistRef$.concat(res));
   }
 
   NavigateToAddAdressPage  () {
@@ -69,12 +40,18 @@ export class AddressListPage {
   getAddressList() {
     let headers = new Headers();
     headers.append("X-Api-Key", "TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb")
-    this.http.get('/shipping?mailerId=26-450-8961', {
+    return this.http.get(`/shipping?mailerId=${this.mailerId}`, {
     headers: headers
     }).toPromise().then(function(data:any){
-    console.log(JSON.parse(data._body));
-    })
-    } 
+      var res = JSON.parse(data._body);
+      return res.data.map(function(d){
+        return {
+          recipientName: d.receiverFullName,
+          recipientAddress: d.destinationAddress
+        }
+      })
+    });
+  } 
  
   
 
