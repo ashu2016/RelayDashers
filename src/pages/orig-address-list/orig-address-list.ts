@@ -7,6 +7,7 @@ import {  NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from "angularfire2/database-deprecated";
 
 import { AddAddressPage } from "../add-address/add-address";
+import { MovedAddressListPage } from "../moved-address-list/moved-address-list";
 import { OriginalAddressInfo } from "../../models/address-info/address-info.interface";
 
 @Component({
@@ -15,7 +16,9 @@ import { OriginalAddressInfo } from "../../models/address-info/address-info.inte
 })
 export class AddressListPage {
 
-  addresslistRef$ : FirebaseListObservable<OriginalAddressInfo[]>;
+  //addresslistRef$ : FirebaseListObservable<OriginalAddressInfo[]>;
+
+  addresslistRef$ : any = [];
   mailerId :string;
   httpHeaders: HttpHeaders;
 
@@ -52,29 +55,45 @@ export class AddressListPage {
               
               
              
-              this.addresslistRef$ =  this.database.list('original-address-list',{
+              // this.addresslistRef$ =  this.database.list('original-address-list',{
+              //   query: {
+              //       orderByChild: 'mailerId',
+              //       equalTo: this.mailerId
+              //   }
+              // });
+
+              Observable.fromPromise(this.getAddressList()).merge(this.database.list('original-address-list',{
                 query: {
                     orderByChild: 'mailerId',
                     equalTo: this.mailerId
                 }
-              });
-
-              this.getAddressList();
+              })).subscribe(res => 
+                this.addresslistRef$ = this.addresslistRef$.concat(res));
   }
 
   NavigateToAddAdressPage  () {
     this.navCtrl.push(AddAddressPage,{ companyMailerId : this.mailerId});
   }
 
+  NavigateToMovedAdressPage  () {
+    this.navCtrl.push(MovedAddressListPage,{ companyMailerId : this.mailerId});
+  }
+
   getAddressList() {
-    let headers = new Headers();
-    headers.append("X-Api-Key", "TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb")
-    this.http.get('/shipping?mailerId=26-450-8961', {
+    let headers = new Headers();
+    headers.append("X-Api-Key", "TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb")
+    return this.http.get(`/shipping?mailerId=${this.mailerId}`, {
     headers: headers
     }).toPromise().then(function(data:any){
-    console.log(JSON.parse(data._body));
-    })
-    } 
+      var res = JSON.parse(data._body);
+      return res.data.map(function(d){
+        return {
+          recipientName: d.receiverFullName,
+          recipientAddress: d.destinationAddress
+        }
+      })
+    });
+  }  
  
   
 

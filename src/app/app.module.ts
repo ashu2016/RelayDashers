@@ -14,6 +14,7 @@ import { RegisterCompanyPage } from '../pages/register-company/register-company'
 import { AddAddressPage } from '../pages/add-address/add-address';
 import { AddressListPage } from "../pages/orig-address-list/orig-address-list";
 import { CompanyLoginPage } from "../pages/company-login/company-login";
+import { MovedAddressListPage } from "../pages/moved-address-list/moved-address-list";
 import { FIREBASE_CREDENTIALS } from "./firebase.credentials";
 
 @NgModule({
@@ -22,7 +23,8 @@ import { FIREBASE_CREDENTIALS } from "./firebase.credentials";
     RegisterCompanyPage,
     AddAddressPage,
     AddressListPage,
-    CompanyLoginPage
+    CompanyLoginPage,
+    MovedAddressListPage
     
   ],
   imports: [
@@ -40,7 +42,8 @@ import { FIREBASE_CREDENTIALS } from "./firebase.credentials";
     RegisterCompanyPage,
     AddAddressPage,
     AddressListPage,
-    CompanyLoginPage
+    CompanyLoginPage,
+    MovedAddressListPage
     
   ],
   providers: [

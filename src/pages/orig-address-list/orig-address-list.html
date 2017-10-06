@@ -10,8 +10,8 @@
   <ion-navbar  color="primary">
     <ion-title>Address List</ion-title>
     <ion-buttons end>
-       <button ion-button icon-only (click)="NavigateToAddAdressPage()">
-        <ion-icon name="add"></ion-icon>
+       <button ion-button icon-only menuToggle="TipMenu">
+        <ion-icon name="menu"></ion-icon>
       </button> 
       <!-- <button ion-button menutoggle="right" (click)="NavigateToAddAdressPage()">
           <ion-icon name="menu"></ion-icon>
@@ -44,9 +44,25 @@
 <ion-content padding>
 
   <ion-list>
-    <ion-item *ngFor="let item of addresslistRef$ | async" >
+    <ion-item *ngFor="let item of addresslistRef$" >
       <h2>Recipient Name : {{item.recipientName}}</h2>
       <h3>Recipient Address : {{item.recipientAddress}}</h3>
     </ion-item>
   </ion-list>
 </ion-content>
+<ion-menu id="TipMenu" persistent="true" side="right" [content]="content">
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="NavigateToAddAdressPage()">
+        Add New Address
+      </button>
+      <button ion-item (click)="NavigateToMovedAdressPage()">
+        Moved Address
+      </button>         
+      <button ion-item menuClose>
+        Close Menu
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<ion-nav #content></ion-nav> -->
