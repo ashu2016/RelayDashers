@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpHeaders} from '@angular/common/http';
+import { RequestOptions,Headers, Http, URLSearchParams } from "@angular/http";
 import {Observable} from 'rxjs';
 import {  NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from "angularfire2/database-deprecated";
@@ -15,16 +16,35 @@ export class AddressListPage {
 
   addresslistRef$ : FirebaseListObservable<OriginalAddressInfo[]>;
   mailerId :string;
+  httpHeaders: HttpHeaders;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private database: AngularFireDatabase,private http: HttpClient
+  constructor(public navCtrl: NavController, public navParams: NavParams, private database: AngularFireDatabase,private http: Http
              ) {
               this.mailerId =   this.navParams.get('companyMailerId');
               console.log(this.mailerId);
-              let apiRoot = 'https://api-qa.fusion.pitneycloud.com/fusionapi/address';
-              let apiURL = `${apiRoot}?mailerId=${this.mailerId}`;
-              // this.http.get<any>(apiURL,{
-              //   headers: new HttpHeaders().set('X-Api-Key', 'TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb')
-              // }).subscribe(data => {
+              // let apiRoot = 'https://api-qa.fusion.pitneycloud.com/fusionapi/address';
+
+              // let myHeaders = new Headers();
+              // myHeaders.append('Content-Type', 'application/json1');    
+              // let myParams = new URLSearchParams();
+              // myParams.append('mailerId',this.mailerId);	
+              // let myoptions = new RequestOptions({ headers: myHeaders, params: myParams });
+
+              // let headers = new Headers();
+              // headers.set('X-Api-Key', 'TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb');
+              // let opts = new RequestOptions();
+              // opts.headers = headers;
+              // let params = new URLSearchParams();
+              // params.set('mailerId',this.mailerId);
+              // opts.params = params;
+              // console.log(opts);
+
+              // let apiURL = `${apiRoot}?mailerId=${this.mailerId}`;
+              
+              // this.httpHeaders =  new HttpHeaders()
+              // this.httpHeaders.append('X-Api-Key', 'TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb');
+              
+              // this.http.get(apiRoot,myoptions).subscribe(data => {
               //     console.log(data);
               //   });
              
@@ -33,10 +53,12 @@ export class AddressListPage {
              
               this.addresslistRef$ =  this.database.list('original-address-list',{
                 query: {
-                    orderByChild: 'recipientName',
+                    orderByChild: 'mailerId',
                     equalTo: this.mailerId
                 }
               });
+
+              this.addresslistRef$.forEach(t =>console.log(t))
   }
 
   NavigateToAddAdressPage  () {
