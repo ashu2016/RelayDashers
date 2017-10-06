@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpHeaders} from '@angular/common/http';
 import { RequestOptions,Headers, Http, URLSearchParams } from "@angular/http";
 import {Observable} from 'rxjs';
+import 'rxjs/add/operator/toPromise'; 
 import {  NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from "angularfire2/database-deprecated";
 
@@ -58,13 +59,22 @@ export class AddressListPage {
                 }
               });
 
-              this.addresslistRef$.forEach(t =>console.log(t))
+              this.getAddressList();
   }
 
   NavigateToAddAdressPage  () {
     this.navCtrl.push(AddAddressPage,{ companyMailerId : this.mailerId});
   }
 
+  getAddressList() {
+    let headers = new Headers();
+    headers.append("X-Api-Key", "TAHb4BcUUe4IZX8D9dFOb8D4vjRXk1195QhfqNXb")
+    this.http.get('/shipping?mailerId=26-450-8961', {
+    headers: headers
+    }).toPromise().then(function(data:any){
+    console.log(JSON.parse(data._body));
+    })
+    } 
  
   
 
