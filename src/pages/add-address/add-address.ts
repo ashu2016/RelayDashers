@@ -33,11 +33,11 @@ export class AddAddressPage {
 
 
   addAddress(originalAddress : OriginalAddressInfo){
-    //   this.originalAddressListRef$.push({
-    //     recipientName : this.originalAddress.recipientName,
-    //     recipientAddress : this.originalAddress.recipientAddress,
-    //     mailerId : this.mailerId
-    // });
+      this.originalAddressListRef$.push({
+        recipientName : this.originalAddress.recipientName,
+        recipientAddress : this.originalAddress.recipientAddress,
+        mailerId : this.mailerId
+    });
 
     console.log(this.originalAddress.recipientName);
     this.masterMovedAddressListRef$ = this.database.list('master-moved-address-list'

@@ -1,12 +1,14 @@
 {
-  "name":"FirebaseCRUD",
-  "app_id":"",
-  "type":"ionic-angular",
+  "name": "FirebaseCRUD",
+  "app_id": "",
+  "type": "ionic-angular",
   "integrations": {
-  
+    "cordova": {}
   },
-  "proxies": [{
-  "path":"/shipping",
-  "proxyUrl":"https://api-qa.fusion.pitneycloud.com/fusionapi/shipping"
-  }]
-  }
+  "proxies": [
+    {
+      "path": "/shipping",
+      "proxyUrl": "https://api-qa.fusion.pitneycloud.com/fusionapi/shipping"
+    }
+  ]
+}
