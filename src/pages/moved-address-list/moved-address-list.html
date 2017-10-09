@@ -15,10 +15,22 @@
 <ion-content padding>
 
   <ion-list>
-    <ion-item *ngFor="let item of movedaddresslistRef$ | async" >
-      <h2>Recipient Name : {{item.recipientName}}</h2>
+    <ion-item *ngFor="let item of movedaddresslistRef$ | async" text-wrap>
+        <ion-card>
+            <ion-card-header>
+                {{item.recipientName}}
+            </ion-card-header>
+            <ion-card-content>
+                <span style="color:#f53d3d; font-weight:500">{{item.recipientAddress}}</span>
+                <br/>
+                <br/>
+                <span style="color:#32db64; font-weight:500">{{item.movedAddress}}</span>
+            </ion-card-content>
+            
+          </ion-card>
+      <!-- <h2>Recipient Name : {{item.recipientName}}</h2>
       <h3>Recipient Old Address : {{item.recipientAddress}}</h3>
-      <h3>Recipient New Address : {{item.movedAddress}}</h3>
+      <h3>Recipient New Address : {{item.movedAddress}}</h3> -->
     </ion-item>
   </ion-list>
 

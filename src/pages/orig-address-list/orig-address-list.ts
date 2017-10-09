@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import 'rxjs/add/operator/toPromise'; 
 import {  NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from "angularfire2/database-deprecated";
+import { ToastController } from 'ionic-angular';
 
 import { AddAddressPage } from "../add-address/add-address";
 import { MovedAddressListPage } from "../moved-address-list/moved-address-list";
@@ -22,8 +23,9 @@ export class AddressListPage {
   addresslistRef$ : any = [];
   mailerId :string;
   httpHeaders: HttpHeaders;
+  firebaseObservable: FirebaseListObservable<OriginalAddressInfo[]>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private database: AngularFireDatabase,private http: Http
+  constructor(public navCtrl: NavController, public navParams: NavParams, private database: AngularFireDatabase,private http: Http, public toastCtrl: ToastController
              ) {
               this.mailerId =   this.navParams.get('companyMailerId');
               console.log(this.mailerId);
@@ -36,6 +38,13 @@ export class AddressListPage {
               //   }
               // });
 
+              this.firebaseObservable = this.database.list('moved-address-list',{
+                query: {
+                    orderByChild: 'mailerId',
+                    equalTo: this.mailerId
+                }
+              });
+
               Observable.fromPromise(this.getAddressList()).merge(this.database.list('original-address-list',{
                 query: {
                     orderByChild: 'mailerId',
@@ -43,6 +52,22 @@ export class AddressListPage {
                 }
               })).subscribe(res => 
                 this.addresslistRef$ = this.addresslistRef$.concat(res));
+              
+              this.firebaseObservable.$ref.limitToLast(1).on("child_added", (child) => {
+                setTimeout(() => {
+                  this.presentToast();
+                }, 5000);
+              });
+
+  }
+
+  presentToast() {
+    let toast = this.toastCtrl.create({
+      message: 'User "Eugen Sisson" has moved to new address',
+      duration: 10000,
+      position: 'top'
+    });
+    toast.present();
   }
 
   NavigateToAddAdressPage  () {
