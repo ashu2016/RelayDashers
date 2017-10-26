@@ -5,6 +5,7 @@ import { MasterMovedAddressInfo } from "../../models/address-info/master-moved-a
 import { MovedAddressInfo } from "../../models/address-info/moved-address.interface";
 import { AngularFireDatabase ,FirebaseListObservable  } from "angularfire2/database-deprecated";
 import {Observable} from 'rxjs';
+import { RequestOptions,Headers, Http, URLSearchParams } from "@angular/http";
 
 
 @Component({
@@ -23,7 +24,7 @@ export class AddAddressPage {
   testlist : any = [];
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,private database:AngularFireDatabase) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,private database:AngularFireDatabase, private http: Http) {
 
     this.mailerId =   this.navParams.get('companyMailerId');
     this.originalAddressListRef$ = this.database.list('original-address-list');
@@ -33,33 +34,40 @@ export class AddAddressPage {
 
 
   addAddress(originalAddress : OriginalAddressInfo){
-      this.originalAddressListRef$.push({
+     this.originalAddressListRef$.push({
         recipientName : this.originalAddress.recipientName,
         recipientAddress : this.originalAddress.recipientAddress,
         mailerId : this.mailerId
+    }).then((data) => {
+        console.log(data);
+        return this.http.get(`/originalAddress?key=${data.key}`, {
+        }).toPromise().then(function(data:any){
+          console.log(data);
+        });
     });
 
+      
     console.log(this.originalAddress.recipientName);
-    this.masterMovedAddressListRef$ = this.database.list('master-moved-address-list'
-   ,
-   {
-      query: {
-        orderByChild: 'recipientName',
-        equalTo: this.originalAddress.recipientName
-      }
-    });
+  //   this.masterMovedAddressListRef$ = this.database.list('master-moved-address-list'
+  //  ,
+  //  {
+  //     query: {
+  //       orderByChild: 'recipientName',
+  //       equalTo: this.originalAddress.recipientName
+  //     }
+  //   });
 
-     this.masterMovedAddressListRef$.forEach(items =>
-       items.forEach( data => { 
-                  this.movedAddressListRef$.push( { mailerId : this.mailerId,
-                                                    recipientName : data.recipientName,
-                                                    recipientAddress :data.recipientAddress,
-                                                    movedAddress : data.movedAddress
-                                                  });
-                              console.log(this.movedAddress.movedAddress); 
-                              }
+  //    this.masterMovedAddressListRef$.forEach(items =>
+  //      items.forEach( data => { 
+  //                 this.movedAddressListRef$.push( { mailerId : this.mailerId,
+  //                                                   recipientName : data.recipientName,
+  //                                                   recipientAddress :data.recipientAddress,
+  //                                                   movedAddress : data.movedAddress
+  //                                                 });
+  //                             console.log(this.movedAddress.movedAddress); 
+  //                             }
         
-                    ));
+  //                   ));
 
  
 

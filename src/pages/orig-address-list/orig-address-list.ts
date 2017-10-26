@@ -55,15 +55,16 @@ export class AddressListPage {
               
               this.firebaseObservable.$ref.limitToLast(1).on("child_added", (child) => {
                 setTimeout(() => {
-                  this.presentToast();
+                  console.log(child.val());
+                  this.presentToast(child.val().recipientName);
                 }, 5000);
               });
 
   }
 
-  presentToast() {
+  presentToast(name:string) {
     let toast = this.toastCtrl.create({
-      message: 'User "Eugen Sisson" has moved to new address',
+      message: `User ${name} has moved to new address`,
       duration: 10000,
       position: 'top'
     });

@@ -9,6 +9,10 @@
     {
       "path": "/shipping",
       "proxyUrl": "https://api-qa.fusion.pitneycloud.com/fusionapi/shipping"
+    },
+    {
+      "path": "/originalAddress",
+      "proxyUrl": "http://10.220.67.167:3000/api/v1/originalAddress"
     }
   ]
 }
